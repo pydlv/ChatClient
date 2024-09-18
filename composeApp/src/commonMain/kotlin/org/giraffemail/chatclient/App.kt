@@ -13,7 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import org.giraffemail.chatclient.screens.ChatListScreen
+import org.giraffemail.chatclient.screens.ChatScreen
 import org.giraffemail.chatclient.screens.SettingsScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -66,7 +66,7 @@ fun App() {
             }
         ) {
             NavHost(navController, startDestination = Route.Chats.route) {
-                composable(route=Route.Chats.route) { ChatListScreen() }
+                composable(route = Route.Chats.route) { ChatScreen() }
                 composable(route=Route.Settings.route) { SettingsScreen() }
             }
         }
