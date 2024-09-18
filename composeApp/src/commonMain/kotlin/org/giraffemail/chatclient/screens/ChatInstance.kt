@@ -1,47 +1,65 @@
 package org.giraffemail.chatclient.screens
 
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import RobotIcon
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.sharp.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
-data class Message(val sender: String, val content: String)
+enum class Sender {
+    User,
+    Bot
+}
+
+data class Message(val sender: Sender, val content: String)
 
 val messages = listOf(
-    Message("User", "Hi AI, how are you today?"),
-    Message("AI", "Hello User, I am here to assist you. How can I help you today?"),
-    Message("User", "Great! I have a few questions about the project."),
-    Message("AI", "Of course. Please go ahead with your questions."),
-    Message("User", "How do I integrate the API into the application?"),
-    Message("AI", "You can start by importing the necessary libraries and setting up your project configuration."),
-    Message("User", "Can you provide an example?"),
-    Message("AI", "Sure, let me pull up an example for you."),
-    Message("AI", "Here's a basic example of API integration..."),
-    Message("User", "Thanks, that helps a lot."),
-    Message("User", "Also, I encountered a bug. The app crashes on launch sometimes."),
-    Message("AI", "Let's debug it together. Can you show me the error log?"),
-    Message("User", "Sure, let me paste the log... [log pasted]"),
+    Message(Sender.User, "Hi AI, how are you today?"),
+    Message(Sender.Bot, "Hello User, I am here to assist you. How can I help you today?"),
+    Message(Sender.User, "Great! I have a few questions about the project."),
+    Message(Sender.Bot, "Of course. Please go ahead with your questions."),
+    Message(Sender.User, "How do I integrate the API into the application?"),
     Message(
-        "AI",
+        Sender.Bot,
+        "You can start by importing the necessary libraries and setting up your project configuration."
+    ),
+    Message(Sender.User, "Can you provide an example?"),
+    Message(Sender.Bot, "Sure, let me pull up an example for you."),
+    Message(Sender.Bot, "Here's a basic example of API integration..."),
+    Message(Sender.User, "Thanks, that helps a lot."),
+    Message(Sender.User, "Also, I encountered a bug. The app crashes on launch sometimes."),
+    Message(Sender.Bot, "Let's debug it together. Can you show me the error log?"),
+    Message(Sender.User, "Sure, let me paste the log... [log pasted]"),
+    Message(
+        Sender.Bot,
         "It seems like there's a null pointer exception. Make sure all the variables are properly initialized."
     ),
-    Message("User", "That makes sense. I'll check my initialization."),
-    Message("User", "Another question, how do I optimize the performance of my app?"),
+    Message(Sender.User, "That makes sense. I'll check my initialization."),
+    Message(Sender.User, "Another question, how do I optimize the performance of my app?"),
     Message(
-        "AI",
+        Sender.Bot,
         "You can start by profiling your app to identify bottlenecks and then apply optimizations like lazy loading, using efficient data structures, etc."
     ),
-    Message("User", "Got it. I'll try those optimizations."),
-    Message("User", "Thanks for your help, AI. I think I can handle it from here."),
-    Message("AI", "You're welcome. Feel free to reach out if you have more questions. Have a great day!")
+    Message(Sender.User, "Got it. I'll try those optimizations."),
+    Message(Sender.User, "Thanks for your help, AI. I think I can handle it from here."),
+    Message(Sender.Bot, "You're welcome. Feel free to reach out if you have more questions. Have a great day!")
 )
 
 @Composable
 fun ChatInstanceScreen() {
-    Column {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         messages.forEach { message ->
             MessageRow(message)
         }
@@ -53,10 +71,14 @@ fun MessageRow(message: Message) {
     Row(
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Column {
-
+        Column(modifier = Modifier.padding(horizontal = 4.dp)) {
+            Icon(
+                imageVector =
+                if (message.sender == Sender.User) Icons.Sharp.Person
+                else RobotIcon,
+                contentDescription = if (message.sender == Sender.User) "User" else "AI"
+            )
         }
-        Text(message.sender)
         Text(message.content)
     }
 }
