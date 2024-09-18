@@ -10,4 +10,4 @@ data class ChatInstance(
     val name: String
 )
 
-val ChatCompositionLocal: ProvidableCompositionLocal<ChatInstance?> = compositionLocalOf { null }
+val ChatInstanceCompositionLocal: ProvidableCompositionLocal<ChatInstance?> = compositionLocalOf { null }

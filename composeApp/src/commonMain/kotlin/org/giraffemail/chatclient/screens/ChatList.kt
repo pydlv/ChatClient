@@ -8,10 +8,9 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -23,19 +22,23 @@ enum class ChatScreens {
 }
 
 @Composable
-fun ChatScreen() {
+fun TopLevelChatScreen() {
     val navController = rememberNavController()
+    val chatInstance: MutableState<ChatInstance?> = remember { mutableStateOf(null) }
 
     NavHost(navController, startDestination = ChatScreens.ChatList.name) {
-        composable(route = ChatScreens.ChatList.name) { ChatListScreen() }
-        composable(route = ChatScreens.ChatInstance.name) { ChatInstanceScreen() }
+        composable(route = ChatScreens.ChatList.name) { ChatListScreen(navController, chatInstance) }
+        composable(route = ChatScreens.ChatInstance.name) {
+            CompositionLocalProvider(ChatInstanceCompositionLocal provides chatInstance.value) {
+                ChatInstanceScreen()
+            }
+        }
     }
 }
 
 @Composable
-fun ChatListScreen() {
+fun ChatListScreen(nav: NavController, chatInstance: MutableState<ChatInstance?>) {
     val chats = getDummyChats()
-    val chatInstance = remember { null }
 
     LazyColumn {
         items(chats) { chat ->
@@ -51,7 +54,10 @@ fun ChatListScreen() {
                         }
                     }
                 },
-                onClick = { }
+                onClick = {
+                    chatInstance.value = chat
+                    nav.navigate(ChatScreens.ChatInstance.name)
+                }
             )
         }
     }
