@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 import org.giraffemail.chatclient.screens.ChatListScreen
 import org.giraffemail.chatclient.screens.SettingsScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -32,9 +34,13 @@ val options: List<DrawerOption> = listOf(
 fun App() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
     MaterialTheme {
-        ModalDrawer(drawerContent = {
+        ModalDrawer(
+            drawerState = drawerState,
+            drawerContent = {
             Text(
                 text = "ChatClient",
                 color = MaterialTheme.colors.onSurface,
@@ -53,10 +59,12 @@ fun App() {
                     content = { Text(option.text) },
                     onClick = {
                         navController.navigate(option.route.route)
+                        scope.launch { drawerState.close() }
                     }
                 )
             }
-        }) {
+            }
+        ) {
             NavHost(navController, startDestination = Route.Chats.route) {
                 composable(route=Route.Chats.route) { ChatListScreen() }
                 composable(route=Route.Settings.route) { SettingsScreen() }
