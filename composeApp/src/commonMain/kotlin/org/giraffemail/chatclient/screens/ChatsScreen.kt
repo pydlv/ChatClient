@@ -9,17 +9,11 @@ import androidx.compose.runtime.Composable
 data class Chat(val id: Int, val name: String, val lastMessage: String)
 
 @Composable
-fun ChatsScreen() {
-    val dummyChats = listOf(
-        Chat(1, "Alice", "Hey! How are you?"),
-        Chat(2, "Bob", "Let's catch up sometime next week."),
-        Chat(3, "Charlie", "Did you finish the project?"),
-        Chat(4, "Diana", "Happy Birthday! 🎉"),
-        Chat(5, "Eddie", "Can we reschedule our meeting?")
-    )
+fun ChatListScreen() {
+    val chats = getDummyChats()
 
     LazyColumn {
-        items(dummyChats) { chat ->
+        items(chats) { chat ->
             ChatItem(chat)
         }
     }
@@ -28,11 +22,22 @@ fun ChatsScreen() {
 @Composable
 fun ChatItem(chat: Chat) {
     Column {
-        Text(
-            text = chat.name,
-        )
-        Text(
-            text = chat.lastMessage,
-        )
+        ChatText(chat.name)
+        ChatText(chat.lastMessage)
     }
+}
+
+@Composable
+fun ChatText(text: String) {
+    Text(text = text)
+}
+
+fun getDummyChats(): List<Chat> {
+    return listOf(
+        Chat(1, "Alice", "Hey! How are you?"),
+        Chat(2, "Bob", "Let's catch up sometime next week."),
+        Chat(3, "Charlie", "Did you finish the project?"),
+        Chat(4, "Diana", "Happy Birthday! 🎉"),
+        Chat(5, "Eddie", "Can we reschedule our meeting?")
+    )
 }
