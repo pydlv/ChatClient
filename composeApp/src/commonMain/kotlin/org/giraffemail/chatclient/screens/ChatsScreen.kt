@@ -2,6 +2,7 @@ package org.giraffemail.chatclient.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
@@ -22,7 +23,7 @@ fun ChatListScreen() {
 
 @Composable
 fun ChatItem(chat: Chat) {
-    Row {
+    Row(horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween, modifier = androidx.compose.ui.Modifier.fillMaxWidth()) {
         Column {
             ChatText(chat.name)
         }
