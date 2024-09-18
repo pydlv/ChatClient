@@ -52,8 +52,10 @@ fun ChatInstanceScreen() {
 fun MessageRow(message: Message) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween
     ) {
+        Column {
+
+        }
         Text(message.sender)
         Text(message.content)
     }

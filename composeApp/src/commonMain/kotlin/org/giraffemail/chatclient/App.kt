@@ -1,9 +1,9 @@
 package org.giraffemail.chatclient
 
+import ChatIcon
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.sharp.Edit
 import androidx.compose.material.icons.sharp.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,7 +25,7 @@ enum class Route(val route: String) {
 data class RailOption(val text: String, val route: Route, val icon: ImageVector);
 
 val topRailOptions: List<RailOption> = listOf(
-    RailOption("Chats", Route.Chats, Icons.Sharp.Edit),
+    RailOption("Chat", Route.Chats, ChatIcon),
 )
 
 val bottomRailOptions: List<RailOption> = listOf(
