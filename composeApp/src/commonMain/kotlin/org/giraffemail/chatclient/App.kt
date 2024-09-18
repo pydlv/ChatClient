@@ -1,12 +1,8 @@
 package org.giraffemail.chatclient
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.NavigationRail
-import androidx.compose.material.NavigationRailItem
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.sharp.ArrowBack
 import androidx.compose.material.icons.sharp.Edit
 import androidx.compose.material.icons.sharp.Settings
 import androidx.compose.runtime.Composable
@@ -26,15 +22,14 @@ enum class Route(val route: String) {
     Settings("settings")
 }
 
-data class MenuItem(val text: String, val route: Route, val icon: ImageVector);
+data class RailOption(val text: String, val route: Route, val icon: ImageVector);
 
-val topOptions: List<MenuItem> = listOf(
-    MenuItem("Back", Route.Chats, Icons.AutoMirrored.Sharp.ArrowBack),
-    MenuItem("Chats", Route.Chats, Icons.Sharp.Edit),
+val topRailOptions: List<RailOption> = listOf(
+    RailOption("Chats", Route.Chats, Icons.Sharp.Edit),
 )
 
-val bottomOptions: List<MenuItem> = listOf(
-    MenuItem("Settings", Route.Settings, Icons.Sharp.Settings),
+val bottomRailOptions: List<RailOption> = listOf(
+    RailOption("Settings", Route.Settings, Icons.Sharp.Settings),
 )
 
 @Composable
@@ -42,37 +37,30 @@ fun App() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
+    val railOptions = @Composable { opts: List<RailOption> ->
+        opts.forEach { option ->
+            val isSelected = navBackStackEntry?.destination?.route == option.route.route
+            NavigationRailItem(
+                selected = isSelected,
+                label = { Text(option.text) },
+                icon = { Icon(option.icon, option.text) },
+                onClick = {
+                    navController.navigate(option.route.route)
+                }
+            )
+        }
+    }
+
     MaterialTheme {
         Row {
-            NavigationRail {
+            NavigationRail(windowInsets = NavigationRailDefaults.windowInsets) {
                 Column(verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxHeight()) {
                     Column {
-                        topOptions.forEach { option ->
-                            val isSelected = navBackStackEntry?.destination?.route == option.route.route
-                            NavigationRailItem(
-                                selected = isSelected,
-                                label = { option.text },
-                                icon = { Icon(option.icon, option.text) },
-                                onClick = {
-                                    navController.navigate(option.route.route)
-                                }
-                            )
-                        }
-
+                        railOptions(topRailOptions)
                     }
 
                     Column {
-                        bottomOptions.forEach { option ->
-                            val isSelected = navBackStackEntry?.destination?.route == option.route.route
-                            NavigationRailItem(
-                                selected = isSelected,
-                                label = { option.text },
-                                icon = { Icon(option.icon, option.text) },
-                                onClick = {
-                                    navController.navigate(option.route.route)
-                                }
-                            )
-                        }
+                        railOptions(bottomRailOptions)
                     }
                 }
             }
