@@ -7,9 +7,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -54,16 +57,38 @@ val messages = listOf(
 
 @Composable
 fun ChatInstanceScreen() {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 8.dp)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        messages.forEach { message ->
-            MessageRow(message)
+    Column(modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxHeight(0.8f)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            messages.forEach { message ->
+                MessageRow(message)
+            }
         }
+
+        MessageBox(
+            Modifier
+                .padding(top = 8.dp)
+                .fillMaxHeight()
+                .fillMaxWidth()
+        )
     }
+}
+
+@Composable
+fun MessageBox(modifier: Modifier = Modifier) {
+    val textValue = remember { mutableStateOf("") }
+
+    TextField(
+        value = textValue.value,
+        onValueChange = { newValue: String -> textValue.value = newValue },
+        label = @Composable { Text("Enter message...") },
+        singleLine = false,
+        modifier = modifier,
+    )
 }
 
 @Composable
