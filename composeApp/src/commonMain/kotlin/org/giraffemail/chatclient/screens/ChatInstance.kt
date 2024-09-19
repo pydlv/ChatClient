@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 enum class Sender {
@@ -101,7 +102,8 @@ fun MessageRow(message: Message) {
                 imageVector =
                 if (message.sender == Sender.User) Icons.Sharp.Person
                 else RobotIcon,
-                contentDescription = if (message.sender == Sender.User) "User" else "AI"
+                contentDescription = if (message.sender == Sender.User) "User" else "AI",
+                tint = if (message.sender == Sender.User) Color.Gray else Color.Blue,
             )
         }
         Text(message.content)
